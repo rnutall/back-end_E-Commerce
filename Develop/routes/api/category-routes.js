@@ -5,65 +5,30 @@ const { Category, Product } = require("../../models");
 // find all categories
 // be sure to include its associated Products
 router.get("/", (req, res) => {
-  const categoryData = [
-    {
-      category_name: "Shirts",
-    },
-    {
-      category_name: "Shorts",
-    },
-    {
-      category_name: "Music",
-    },
-    {
-      category_name: "Hats",
-    },
-    {
-      category_name: "Shoes",
-    },
-  ];
+  Category.findAll().then((CategoryData) => {
+    res.json(CategoryData);
+  });
 });
 
 // find one category by its `id` value
 // be sure to include its associated Products
 router.get("/:id", (req, res) => {
-  const productData = [
+  Category.findOne(
     {
-      product_name: "Plain T-Shirt",
-      price: 14.99,
-      stock: 14,
-      category_id: 1,
-    },
-    {
-      product_name: "Running Sneakers",
-      price: 90.0,
-      stock: 25,
-      category_id: 5,
-    },
-    {
-      product_name: "Branded Baseball Hat",
-      price: 22.99,
-      stock: 12,
-      category_id: 4,
-    },
-    {
-      product_name: "Top 40 Music Compilation Vinyl Record",
-      price: 12.99,
-      stock: 50,
-      category_id: 3,
-    },
-    {
-      product_name: "Cargo Shorts",
-      price: 29.99,
-      stock: 22,
-      category_id: 2,
-    },
-  ];
+      // Gets the Category based on the id given in the request parameters
+      where: { 
+        id: req.params.id 
+      },
+    }
+  ).then((CategoryData) => {
+    res.json(CategoryData);
+  });
 });
+
 
 router.post("/", (req, res) => {
   // create a new category
-  Book.bulkCreate([
+  Category.bulkCreate([
     {
       title: "Make It Stick: The Science of Successful Learning",
       author: "Peter Brown",
@@ -85,27 +50,41 @@ router.post("/", (req, res) => {
 
   // update a category by its `id` value
   router.put("/:id", (req, res) => {
-    // Calls the update method on the Book model
-    Book.update({
-      // All the fields you can update and the data attached to the request body.
-      title: req.body.title,
-      author: req.body.author,
-      id: req.body.id,
-      pages: req.body.pages,
-      edition: req.body.edition,
-      is_paperback: req.body.is_paperback,
-    });
+    // Calls the update method on the Category model
+    Category.update(
+      {
+        // All the fields you can update and the data attached to the request body.
+        title: req.body.title,
+        author: req.body.author,
+        id: req.body.id,
+        pages: req.body.pages,
+        edition: req.body.edition,
+        is_paperback: req.body.is_paperback,
+      },
+      {
+        // Gets the Categorys based on the id given in the request parameters
+        where: {
+          id: req.params.id,
+        },
+      }
+    )
+      .then((updatedCategory) => {
+        // Sends the updated Category as a json response
+        res.json(updatedCategory);
+      })
+      .catch((err) => res.json(err));
   });
+  
 
   // delete a category by its `id` value
   router.delete("/:id", (req, res) => {
-    Book.destroy({
+    Category.destroy({
       where: {
         id: req.params.id,
       },
     })
-      .then((deletedBook) => {
-        res.json(deletedBook);
+      .then((deletedCategory) => {
+        res.json(deletedCategory);
       })
       .catch((err) => res.json(err));
   });

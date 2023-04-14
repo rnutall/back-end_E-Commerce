@@ -7,8 +7,8 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // find all products
   // be sure to include its associated Category and Tag data
 router.get('/', (req, res) => {  
-  Book.findAll().then((bookData) => {
-    res.json(bookData);
+  Product.findAll().then((ProductData) => {
+    res.json(ProductData);
   });
 });
 
@@ -16,15 +16,15 @@ router.get('/', (req, res) => {
 // find a single product by its `id`
   // be sure to include its associated Category and Tag data
 router.get('/:id', (req, res) => {
-  Book.findOne(
+  Product.findOne(
     {
-      // Gets the book based on the isbn given in the request parameters
+      // Gets the Product based on the isbn given in the request parameters
       where: { 
-        isbn: req.params.isbn 
+        id: req.params.id
       },
     }
-  ).then((bookData) => {
-    res.json(bookData);
+  ).then((ProductData) => {
+    res.json(ProductData);
   });
 });
 
