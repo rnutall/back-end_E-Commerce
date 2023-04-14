@@ -4,16 +4,30 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', (req, res) => {
-  // find all products
+// find all products
   // be sure to include its associated Category and Tag data
+router.get('/', (req, res) => {  
+  Book.findAll().then((bookData) => {
+    res.json(bookData);
+  });
 });
 
 // get one product
-router.get('/:id', (req, res) => {
-  // find a single product by its `id`
+// find a single product by its `id`
   // be sure to include its associated Category and Tag data
+router.get('/:id', (req, res) => {
+  Book.findOne(
+    {
+      // Gets the book based on the isbn given in the request parameters
+      where: { 
+        isbn: req.params.isbn 
+      },
+    }
+  ).then((bookData) => {
+    res.json(bookData);
+  });
 });
+
 
 // create new product
 router.post('/', (req, res) => {
